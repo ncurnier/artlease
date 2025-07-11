@@ -1,7 +1,7 @@
 import { createClient } from '@supabase/supabase-js';
 
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || 'https://rxadlcvelitixlhptulb.supabase.co';
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ4YWRsY3ZlbGl0aXhsaHB0dWxiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzYzMzQ0NzMsImV4cCI6MjA1MTkxMDQ3M30.Qs6Qs_Qs6Qs_Qs6Qs_Qs6Qs_Qs6Qs_Qs6Qs_Qs6Qs';
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ4YWRsY3ZlbGl0aXhsaHB0dWxiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTIxMjk1MTEsImV4cCI6MjA2NzcwNTUxMX0.zEmaUzI2TuipqPx5HG5LDu0q0B6tiZX-LjJU87oNG18';
 
 if (!supabaseUrl || !supabaseAnonKey) {
   console.warn('Variables d\'environnement Supabase manquantes, utilisation des valeurs par défaut');
