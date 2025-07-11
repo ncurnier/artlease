@@ -8,7 +8,7 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "postinstall": "cp .env.example .env || echo '.env already exists'"
+    "postinstall": "cp .env.example .env || echo \".env already exists\""
   },
   "dependencies": {
     "@stripe/stripe-js": "^2.4.0",
