@@ -22,14 +22,17 @@ const Contact: React.FC = () => {
     
     try {
       // Créer le prospect dans Supabase
-      await createProspect({
+      const prospectData = {
         nom: formData.nom,
         entreprise: formData.entreprise,
         email: formData.email,
         telephone: formData.telephone || null,
         statut: 'Nouveau',
         source: 'Contact'
-      });
+      };
+      
+      console.log('Envoi des données prospect:', prospectData);
+      await createProspect(prospectData);
 
       // Si l'utilisateur souhaite s'abonner à la newsletter
       if (formData.newsletter) {
@@ -62,7 +65,7 @@ const Contact: React.FC = () => {
       }, 3000);
     } catch (error) {
       console.error('Erreur lors de l\'envoi du formulaire:', error);
-      alert('Erreur lors de l\'envoi du formulaire. Veuillez réessayer.');
+      alert(`Erreur lors de l'envoi du formulaire: ${error.message || 'Veuillez réessayer.'}`);
     }
   };
 

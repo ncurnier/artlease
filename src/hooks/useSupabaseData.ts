@@ -159,15 +159,21 @@ export const useCreateProspect = () => {
     setError(null);
 
     try {
+      console.log('Tentative de création prospect:', prospectData);
       const { data, error } = await supabase
         .from('prospects')
         .insert([prospectData])
         .select()
         .single();
 
-      if (error) throw error;
+      if (error) {
+        console.error('Erreur Supabase:', error);
+        throw error;
+      }
+      console.log('Prospect créé avec succès:', data);
       return data;
     } catch (err) {
+      console.error('Erreur dans createProspect:', err);
       const errorMessage = err instanceof Error ? err.message : 'Erreur lors de la création du prospect';
       setError(errorMessage);
       throw new Error(errorMessage);
@@ -286,17 +292,29 @@ export const useCreateNewsletterSubscriber = () => {
     setError(null);
 
     try {
+      console.log('Tentative d\'inscription newsletter:', subscriberData);
+      
+      // Essayer d'abord d'insérer directement
       const { data, error } = await supabase
-        .rpc('add_newsletter_subscriber', {
-          p_email: subscriberData.email,
-          p_nom: subscriberData.nom || null,
-          p_entreprise: subscriberData.entreprise || null,
-          p_source: subscriberData.source || 'Site web'
-        });
+        .from('newsletter_subscribers')
+        .insert([{
+          email: subscriberData.email,
+          nom: subscriberData.nom || null,
+          entreprise: subscriberData.entreprise || null,
+          source: subscriberData.source || 'Site web',
+          statut: 'Actif'
+        }])
+        .select()
+        .single();
 
-      if (error) throw error;
+      if (error) {
+        console.error('Erreur Supabase newsletter:', error);
+        throw error;
+      }
+      console.log('Abonné créé avec succès:', data);
       return data;
     } catch (err) {
+      console.error('Erreur dans createSubscriber:', err);
       const errorMessage = err instanceof Error ? err.message : 'Erreur lors de l\'inscription à la newsletter';
       setError(errorMessage);
       throw new Error(errorMessage);

@@ -12,12 +12,14 @@ const Footer: React.FC = () => {
     if (!email) return;
 
     try {
+      console.log('Inscription newsletter pour:', email);
       await createSubscriber({ email, source: 'Site web' });
       setIsSubscribed(true);
       setEmail('');
       setTimeout(() => setIsSubscribed(false), 3000);
     } catch (error) {
       console.error('Erreur lors de l\'inscription à la newsletter:', error);
+      alert(`Erreur lors de l'inscription: ${error.message || 'Veuillez réessayer.'}`);
     }
   };
 
