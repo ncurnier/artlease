@@ -23,7 +23,7 @@ export const mockArtworks: Artwork[] = [
     biographie_artiste: 'Léonard de Vinci (1452-1519) est célèbre pour ses chefs-d\'œuvre artistiques et ses découvertes scientifiques.',
     prix_location_mois: 200,
     disponibilite: 'Disponible',
-    url_image: 'https://images.pexels.com/photos/1070547/pexels-photo-1070547.jpeg?auto=compress&cs=tinysrgb&w=800'
+    url_image: 'https://images.pexels.com/photos/1070289/pexels-photo-1070289.jpeg?auto=compress&cs=tinysrgb&w=800'
   },
   {
     id: '3',
@@ -35,7 +35,7 @@ export const mockArtworks: Artwork[] = [
     biographie_artiste: 'Michel-Ange (1475-1564) est l\'un des plus grands artistes de la Renaissance, maître sculpteur, peintre et architecte.',
     prix_location_mois: 220,
     disponibilite: 'Réservé',
-    url_image: 'https://images.pexels.com/photos/1070289/pexels-photo-1070289.jpeg?auto=compress&cs=tinysrgb&w=800'
+    url_image: 'https://images.pexels.com/photos/1070290/pexels-photo-1070290.jpeg?auto=compress&cs=tinysrgb&w=800'
   },
   {
     id: '4',
@@ -47,7 +47,7 @@ export const mockArtworks: Artwork[] = [
     biographie_artiste: 'Michel-Ange (1475-1564), figure emblématique de l\'art occidental, célèbre pour ses sculptures monumentales.',
     prix_location_mois: 300,
     disponibilite: 'Disponible',
-    url_image: 'https://images.pexels.com/photos/1070544/pexels-photo-1070544.jpeg?auto=compress&cs=tinysrgb&w=800'
+    url_image: 'https://images.pexels.com/photos/1070291/pexels-photo-1070291.jpeg?auto=compress&cs=tinysrgb&w=800'
   },
   {
     id: '5',
@@ -59,7 +59,7 @@ export const mockArtworks: Artwork[] = [
     biographie_artiste: 'Raphaël (1483-1520), maître de la Haute Renaissance, connu pour ses fresques et son sens de l\'harmonie.',
     prix_location_mois: 210,
     disponibilite: 'Disponible',
-    url_image: 'https://images.pexels.com/photos/1070290/pexels-photo-1070290.jpeg?auto=compress&cs=tinysrgb&w=800'
+    url_image: 'https://images.pexels.com/photos/1070292/pexels-photo-1070292.jpeg?auto=compress&cs=tinysrgb&w=800'
   },
   {
     id: '6',
@@ -71,7 +71,7 @@ export const mockArtworks: Artwork[] = [
     biographie_artiste: 'Raphaël, artiste de la Renaissance italienne, a marqué l\'histoire par ses compositions équilibrées et poétiques.',
     prix_location_mois: 180,
     disponibilite: 'En rotation',
-    url_image: 'https://images.pexels.com/photos/1070291/pexels-photo-1070291.jpeg?auto=compress&cs=tinysrgb&w=800'
+    url_image: 'https://images.pexels.com/photos/1070293/pexels-photo-1070293.jpeg?auto=compress&cs=tinysrgb&w=800'
   },
   {
     id: '7',
@@ -83,7 +83,7 @@ export const mockArtworks: Artwork[] = [
     biographie_artiste: 'Vincent van Gogh (1853-1890), peintre post-impressionniste néerlandais, maître des couleurs vibrantes et de l\'expressivité.',
     prix_location_mois: 240,
     disponibilite: 'Disponible',
-    url_image: 'https://images.pexels.com/photos/1070545/pexels-photo-1070545.jpeg?auto=compress&cs=tinysrgb&w=800'
+    url_image: 'https://images.pexels.com/photos/1070544/pexels-photo-1070544.jpeg?auto=compress&cs=tinysrgb&w=800'
   },
   {
     id: '8',
@@ -95,7 +95,7 @@ export const mockArtworks: Artwork[] = [
     biographie_artiste: 'Johannes Vermeer (1632-1675), peintre hollandais du Siècle d\'or, maître des scènes intimistes et de la lumière.',
     prix_location_mois: 200,
     disponibilite: 'Disponible',
-    url_image: 'https://images.pexels.com/photos/1070546/pexels-photo-1070546.jpeg?auto=compress&cs=tinysrgb&w=800'
+    url_image: 'https://images.pexels.com/photos/1070545/pexels-photo-1070545.jpeg?auto=compress&cs=tinysrgb&w=800'
   },
   {
     id: '9',
@@ -107,7 +107,7 @@ export const mockArtworks: Artwork[] = [
     biographie_artiste: 'Théodore Géricault (1791-1824) est un pionnier du romantisme, célèbre pour ses toiles monumentales et engagées.',
     prix_location_mois: 230,
     disponibilite: 'Disponible',
-    url_image: 'https://images.pexels.com/photos/1070292/pexels-photo-1070292.jpeg?auto=compress&cs=tinysrgb&w=800'
+    url_image: 'https://images.pexels.com/photos/1070546/pexels-photo-1070546.jpeg?auto=compress&cs=tinysrgb&w=800'
   },
   {
     id: '10',
@@ -119,7 +119,7 @@ export const mockArtworks: Artwork[] = [
     biographie_artiste: 'Paolo Veronese (1528-1588), maître vénitien du maniérisme, célèbre pour ses compositions grandioses et festives.',
     prix_location_mois: 260,
     disponibilite: 'Disponible',
-    url_image: 'https://images.pexels.com/photos/1070293/pexels-photo-1070293.jpeg?auto=compress&cs=tinysrgb&w=800'
+    url_image: 'https://images.pexels.com/photos/1070547/pexels-photo-1070547.jpeg?auto=compress&cs=tinysrgb&w=800'
   }
 ];
 

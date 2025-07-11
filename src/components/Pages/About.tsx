@@ -60,7 +60,7 @@ const About: React.FC = () => {
           
           <div>
             <img 
-              src="https://images.pexels.com/photos/1070547/pexels-photo-1070547.jpeg?auto=compress&cs=tinysrgb&w=800" 
+              src="https://images.pexels.com/photos/1070289/pexels-photo-1070289.jpeg?auto=compress&cs=tinysrgb&w=800" 
               alt="Galerie d'art" 
               className="rounded-lg shadow-lg"
             />

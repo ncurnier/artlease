@@ -155,6 +155,10 @@ const Catalogue: React.FC<CatalogueProps> = ({ onPageChange }) => {
                   src={artwork.url_image} 
                   alt={artwork.titre}
                   className="w-full h-64 object-cover"
+                  onError={(e) => {
+                    const target = e.target as HTMLImageElement;
+                    target.src = 'https://images.pexels.com/photos/1070548/pexels-photo-1070548.jpeg?auto=compress&cs=tinysrgb&w=800';
+                  }}
                 />
                 <div className="absolute top-4 right-4">
                   <span className={`px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(artwork.disponibilite)}`}>
