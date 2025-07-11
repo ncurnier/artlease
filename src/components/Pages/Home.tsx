@@ -62,7 +62,7 @@ const Home: React.FC<HomeProps> = ({ onPageChange }) => {
             </div>
             <div className="relative">
               <img 
-                src="https://images.pexels.com/photos/1070548/pexels-photo-1070548.jpeg?auto=compress&cs=tinysrgb&w=800" 
+                src="https://images.unsplash.com/photo-1541961017774-22349e4a1262?w=800&h=600&fit=crop&crop=center" 
                 alt="Œuvre d'art classique" 
                 className="rounded-lg shadow-2xl"
               />

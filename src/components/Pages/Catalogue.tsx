@@ -157,7 +157,7 @@ const Catalogue: React.FC<CatalogueProps> = ({ onPageChange }) => {
                   className="w-full h-64 object-cover"
                   onError={(e) => {
                     const target = e.target as HTMLImageElement;
-                    target.src = 'https://images.pexels.com/photos/1070548/pexels-photo-1070548.jpeg?auto=compress&cs=tinysrgb&w=800';
+                    target.src = 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=800&h=600&fit=crop&crop=center';
                   }}
                 />
                 <div className="absolute top-4 right-4">
@@ -233,6 +233,10 @@ const Catalogue: React.FC<CatalogueProps> = ({ onPageChange }) => {
                     src={selectedArtwork.url_image} 
                     alt={selectedArtwork.titre}
                     className="w-full rounded-lg shadow-lg"
+                    onError={(e) => {
+                      const target = e.target as HTMLImageElement;
+                      target.src = 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=800&h=600&fit=crop&crop=center';
+                    }}
                   />
                 </div>
                 
