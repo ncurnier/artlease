@@ -7,7 +7,7 @@ import Checkout from './pages/Checkout.tsx';
 import Login from './pages/Login.tsx';
 import Register from './pages/Register.tsx';
 import AdminPanel from './pages/AdminPanel.tsx';
-import { ProtectedRoute } from './components/Auth/ProtectedRoute.tsx';
+import ProtectedRoute from './components/Auth/ProtectedRoute';
 
 function App() {
   return (
