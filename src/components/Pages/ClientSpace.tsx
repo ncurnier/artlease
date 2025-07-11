@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { User, Calendar, FileText, Settings, CreditCard } from 'lucide-react';
-import { useAuth } from '../../contexts/AuthContext';
 import { useLocations, useArtworks } from '../../hooks/useSupabaseData';
 
 interface ClientSpaceProps {
@@ -8,12 +7,18 @@ interface ClientSpaceProps {
 }
 
 const ClientSpace: React.FC<ClientSpaceProps> = ({ onPageChange }) => {
-  const { user, loading: authLoading } = useAuth();
   const { locations, loading: locationsLoading } = useLocations();
   const { artworks, loading: artworksLoading } = useArtworks();
   const [activeTab, setActiveTab] = useState('overview');
 
-  if (authLoading || locationsLoading || artworksLoading) {
+  // Mock user data since we removed auth
+  const mockUser = {
+    nom: 'Client Démo',
+    email: 'client@demo.com',
+    entreprise: 'Entreprise Démo'
+  };
+
+  if (locationsLoading || artworksLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
@@ -22,11 +27,6 @@ const ClientSpace: React.FC<ClientSpaceProps> = ({ onPageChange }) => {
         </div>
       </div>
     );
-  }
-
-  if (!user) {
-    onPageChange('login');
-    return null;
   }
 
   // Get client's current locations
@@ -54,12 +54,12 @@ const ClientSpace: React.FC<ClientSpaceProps> = ({ onPageChange }) => {
                 Espace Client
               </h1>
               <p className="text-gray-600 mt-1">
-                Bienvenue, {user.nom}
+                Bienvenue, {mockUser.nom}
               </p>
             </div>
             <div className="text-right">
               <p className="text-sm text-gray-500">Entreprise</p>
-              <p className="font-semibold text-gray-800">{user.entreprise}</p>
+              <p className="font-semibold text-gray-800">{mockUser.entreprise}</p>
             </div>
           </div>
         </div>
@@ -224,18 +224,16 @@ const ClientSpace: React.FC<ClientSpaceProps> = ({ onPageChange }) => {
                       <label className="block text-sm font-medium text-gray-700 mb-1">Nom</label>
                       <input 
                         type="text" 
-                        value={user.nom} 
+                        value={mockUser.nom} 
                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent"
-                        readOnly
                       />
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
                       <input 
                         type="email" 
-                        value={user.email} 
+                        value={mockUser.email} 
                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent"
-                        readOnly
                       />
                     </div>
                   </div>

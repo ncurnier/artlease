@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { BarChart3, Users, Palette, Calendar, FileText, Settings, Plus, Edit, Trash2, Eye, Mail } from 'lucide-react';
-import { useAuth } from '../../contexts/AuthContext';
 import { useProspects, useClients, useArtworks, useLocations } from '../../hooks/useSupabaseData';
 import NewsletterManager from './NewsletterManager';
 
@@ -9,17 +8,17 @@ interface AdminDashboardProps {
 }
 
 const AdminDashboard: React.FC<AdminDashboardProps> = ({ onPageChange }) => {
-  const { user, isAdmin } = useAuth();
   const { prospects, loading: prospectsLoading } = useProspects();
   const { clients, loading: clientsLoading } = useClients();
   const { artworks, loading: artworksLoading } = useArtworks();
   const { locations, loading: locationsLoading } = useLocations();
   const [activeTab, setActiveTab] = useState('dashboard');
 
-  if (!isAdmin) {
-    onPageChange('accueil');
-    return null;
-  }
+  // Mock admin user since we removed auth
+  const mockUser = {
+    nom: 'Admin Démo',
+    role: 'admin'
+  };
 
   const tabs = [
     { id: 'dashboard', label: 'Tableau de Bord', icon: <BarChart3 className="h-5 w-5" /> },
@@ -60,6 +59,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onPageChange }) => {
       </div>
     );
   }
+
   return (
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="container mx-auto px-4">
@@ -71,12 +71,12 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onPageChange }) => {
                 Administration ArtLease Pro
               </h1>
               <p className="text-gray-600 mt-1">
-                Bienvenue, {user?.nom}
+                Bienvenue, {mockUser.nom}
               </p>
             </div>
             <div className="text-right">
               <p className="text-sm text-gray-500">Rôle</p>
-              <p className="font-semibold text-gray-800 capitalize">{user?.role}</p>
+              <p className="font-semibold text-gray-800 capitalize">{mockUser.role}</p>
             </div>
           </div>
         </div>
@@ -413,12 +413,12 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onPageChange }) => {
                           return (
                             <tr key={location.id} className="hover:bg-gray-50">
                               <td className="px-6 py-4 whitespace-nowrap">
-                                <div className="text-sm font-medium text-gray-900">{client?.nom}</div>
-                                <div className="text-sm text-gray-500">{client?.entreprise}</div>
+                                <div className="text-sm font-medium text-gray-900">{client?.nom || 'Client inconnu'}</div>
+                                <div className="text-sm text-gray-500">{client?.entreprise || 'N/A'}</div>
                               </td>
                               <td className="px-6 py-4 whitespace-nowrap">
-                                <div className="text-sm font-medium text-gray-900">{artwork?.titre}</div>
-                                <div className="text-sm text-gray-500">{artwork?.artiste}</div>
+                                <div className="text-sm font-medium text-gray-900">{artwork?.titre || 'Œuvre inconnue'}</div>
+                                <div className="text-sm text-gray-500">{artwork?.artiste || 'N/A'}</div>
                               </td>
                               <td className="px-6 py-4 whitespace-nowrap">
                                 <div className="text-sm text-gray-900">
@@ -542,7 +542,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onPageChange }) => {
                         </label>
                         <input 
                           type="number" 
-                          value="3" 
+                          defaultValue="3" 
                           className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent"
                         />
                       </div>
@@ -552,7 +552,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onPageChange }) => {
                         </label>
                         <input 
                           type="number" 
-                          value="20" 
+                          defaultValue="20" 
                           className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent"
                         />
                       </div>
