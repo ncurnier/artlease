@@ -13,7 +13,6 @@
   "dependencies": {
     "@stripe/stripe-js": "^2.4.0",
     "@supabase/supabase-js": "^2.50.4",
-    "caniuse-lite": "^1.0.30001727",
     "date-fns": "^3.6.0",
     "framer-motion": "^10.18.0",
     "html2canvas": "^1.4.1",
