@@ -1,5 +1,8 @@
 import { createClient } from '@supabase/supabase-js';
 
+// Import supabase for direct usage in components
+export { supabase } from './supabase';
+
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || 'https://rxadlcvelitixlhptulb.supabase.co';
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ4YWRsY3ZlbGl0aXhsaHB0dWxiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzYzMzQ0NzMsImV4cCI6MjA1MTkxMDQ3M30.Qs6Qs_Qs6Qs_Qs6Qs_Qs6Qs_Qs6Qs_Qs6Qs_Qs6Qs';
 

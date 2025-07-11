@@ -3,10 +3,11 @@ import { Mail, Users, Send, Plus, Edit, Trash2, Eye, Calendar, BarChart3 } from 
 import { useNewsletterData } from '../../hooks/useSupabaseData';
 
 const NewsletterManager: React.FC = () => {
-  const { subscribers, campaigns, loading, createCampaign, createSubscriber } = useNewsletterData();
+  const { subscribers, campaigns, loading, createCampaign, createSubscriber, updateSubscriber, deleteSubscriber } = useNewsletterData();
   const [activeTab, setActiveTab] = useState('subscribers');
   const [showNewCampaign, setShowNewCampaign] = useState(false);
   const [showNewSubscriber, setShowNewSubscriber] = useState(false);
+  const [editingSubscriber, setEditingSubscriber] = useState<any>(null);
 
   const [campaignForm, setCampaignForm] = useState({
     titre: '',
@@ -28,6 +29,7 @@ const NewsletterManager: React.FC = () => {
       setShowNewCampaign(false);
     } catch (error) {
       console.error('Erreur lors de la création de la campagne:', error);
+      alert('Erreur lors de la création de la campagne');
     }
   };
 
@@ -42,6 +44,28 @@ const NewsletterManager: React.FC = () => {
       setShowNewSubscriber(false);
     } catch (error) {
       console.error('Erreur lors de l\'ajout de l\'abonné:', error);
+      alert('Erreur lors de l\'ajout de l\'abonné');
+    }
+  };
+
+  const handleUpdateSubscriber = async (id: string, updates: any) => {
+    try {
+      await updateSubscriber(id, updates);
+      setEditingSubscriber(null);
+    } catch (error) {
+      console.error('Erreur lors de la mise à jour:', error);
+      alert('Erreur lors de la mise à jour');
+    }
+  };
+
+  const handleDeleteSubscriber = async (id: string) => {
+    if (confirm('Êtes-vous sûr de vouloir supprimer cet abonné ?')) {
+      try {
+        await deleteSubscriber(id);
+      } catch (error) {
+        console.error('Erreur lors de la suppression:', error);
+        alert('Erreur lors de la suppression');
+      }
     }
   };
 
@@ -87,7 +111,7 @@ const NewsletterManager: React.FC = () => {
           <p className="text-3xl font-bold text-yellow-600">
             {campaigns.length > 0 
               ? Math.round((campaigns.reduce((sum, c) => sum + (c.nombre_ouvertures || 0), 0) / 
-                  campaigns.reduce((sum, c) => sum + (c.nombre_destinataires || 0), 0)) * 100)
+                  Math.max(campaigns.reduce((sum, c) => sum + (c.nombre_destinataires || 0), 0), 1)) * 100)
               : 0}%
           </p>
         </div>
@@ -200,22 +224,34 @@ const NewsletterManager: React.FC = () => {
                         {subscriber.entreprise || 'N/A'}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <span className={`px-2 py-1 text-xs font-medium rounded-full ${getStatusColor(subscriber.statut)}`}>
-                          {subscriber.statut}
-                        </span>
+                        <select
+                          value={subscriber.statut}
+                          onChange={(e) => handleUpdateSubscriber(subscriber.id, { statut: e.target.value })}
+                          className={`px-2 py-1 text-xs font-medium rounded-full border-0 ${getStatusColor(subscriber.statut)}`}
+                        >
+                          <option value="Actif">Actif</option>
+                          <option value="Inactif">Inactif</option>
+                          <option value="Désabonné">Désabonné</option>
+                        </select>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                         {subscriber.source}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                        {new Date(subscriber.date_inscription).toLocaleDateString()}
+                        {new Date(subscriber.date_inscription || subscriber.created_at).toLocaleDateString()}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                         <div className="flex space-x-2">
-                          <button className="text-yellow-600 hover:text-yellow-900">
+                          <button 
+                            onClick={() => setEditingSubscriber(subscriber)}
+                            className="text-yellow-600 hover:text-yellow-900"
+                          >
                             <Edit className="h-4 w-4" />
                           </button>
-                          <button className="text-red-600 hover:text-red-900">
+                          <button 
+                            onClick={() => handleDeleteSubscriber(subscriber.id)}
+                            className="text-red-600 hover:text-red-900"
+                          >
                             <Trash2 className="h-4 w-4" />
                           </button>
                         </div>
@@ -252,9 +288,9 @@ const NewsletterManager: React.FC = () => {
                     <p className="text-sm text-gray-500 mb-4 line-clamp-2">{campaign.contenu}</p>
                     
                     <div className="flex items-center space-x-4 text-sm text-gray-500">
-                      <span>📧 {campaign.nombre_destinataires} destinataires</span>
-                      <span>👁️ {campaign.nombre_ouvertures} ouvertures</span>
-                      <span>🖱️ {campaign.nombre_clics} clics</span>
+                      <span>📧 {campaign.nombre_destinataires || 0} destinataires</span>
+                      <span>👁️ {campaign.nombre_ouvertures || 0} ouvertures</span>
+                      <span>🖱️ {campaign.nombre_clics || 0} clics</span>
                       {campaign.date_envoi && (
                         <span>📅 {new Date(campaign.date_envoi).toLocaleDateString()}</span>
                       )}
@@ -292,14 +328,38 @@ const NewsletterManager: React.FC = () => {
             <div className="bg-white border rounded-lg p-6">
               <h4 className="font-semibold text-gray-800 mb-4">Évolution des abonnés</h4>
               <div className="text-center py-8 text-gray-500">
-                Graphique à implémenter
+                <BarChart3 className="h-16 w-16 mx-auto mb-4 text-gray-300" />
+                <p>Graphique d'évolution des abonnés</p>
+                <p className="text-sm">Fonctionnalité à implémenter</p>
               </div>
             </div>
             
             <div className="bg-white border rounded-lg p-6">
               <h4 className="font-semibold text-gray-800 mb-4">Performance des campagnes</h4>
               <div className="text-center py-8 text-gray-500">
-                Graphique à implémenter
+                <Mail className="h-16 w-16 mx-auto mb-4 text-gray-300" />
+                <p>Statistiques des campagnes</p>
+                <p className="text-sm">Fonctionnalité à implémenter</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-white border rounded-lg p-6">
+            <h4 className="font-semibold text-gray-800 mb-4">Résumé des Performances</h4>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="text-center p-4 bg-blue-50 rounded-lg">
+                <p className="text-2xl font-bold text-blue-600">{subscribers.length}</p>
+                <p className="text-sm text-gray-600">Total Abonnés</p>
+              </div>
+              <div className="text-center p-4 bg-green-50 rounded-lg">
+                <p className="text-2xl font-bold text-green-600">{campaigns.length}</p>
+                <p className="text-sm text-gray-600">Campagnes Créées</p>
+              </div>
+              <div className="text-center p-4 bg-yellow-50 rounded-lg">
+                <p className="text-2xl font-bold text-yellow-600">
+                  {campaigns.reduce((sum, c) => sum + (c.nombre_ouvertures || 0), 0)}
+                </p>
+                <p className="text-sm text-gray-600">Total Ouvertures</p>
               </div>
             </div>
           </div>
