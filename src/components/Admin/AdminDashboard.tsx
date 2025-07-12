@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { BarChart3, Users, Palette, Calendar, FileText, Settings, Plus, Edit, Trash2, Eye, Mail } from 'lucide-react';
 import { useProspects, useClients, useArtworks, useLocations, useArtworkManagement } from '../../hooks/useSupabaseData';
+import { supabase } from '../../lib/supabase';
 import NewsletterManager from './NewsletterManager';
 
 interface AdminDashboardProps {

@@ -7,10 +7,21 @@ import { useCart } from '../contexts/CartContext';
 import { useAuth } from '../contexts/AuthContext';
 import toast from 'react-hot-toast';
 
+console.log('Gallery component file loaded');
+
 const Gallery: React.FC = () => {
+  console.log('Gallery component function called');
+  
   const { artworks, loading, error } = useArtworks();
+  console.log('useArtworks hook called - artworks:', artworks?.length || 0, 'loading:', loading, 'error:', error);
+  
   const { addToCart } = useCart();
+  console.log('useCart hook called');
+  
   const { user } = useAuth();
+  console.log('useAuth hook called');
+  
+  console.log('Gallery component rendering - artworks:', artworks?.length || 0, 'loading:', loading, 'error:', error);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
   const [selectedArtist, setSelectedArtist] = useState('');
