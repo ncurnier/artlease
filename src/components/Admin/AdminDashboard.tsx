@@ -5,21 +5,20 @@ import { supabase } from '../../lib/supabase';
 import NewsletterManager from './NewsletterManager';
 
 interface AdminDashboardProps {
-  onPageChange: (page: string) => void;
+  onPageChange?: (page: string) => void;
 }
 
-const AdminDashboard: React.FC<AdminDashboardProps> = ({ onPageChange }) => {
+const AdminDashboard: React.FC<AdminDashboardProps> = () => {
   const { prospects, loading: prospectsLoading, updateProspect, deleteProspect } = useProspects();
-  const { clients, loading: clientsLoading, updateClient, deleteClient, createClient } = useClients();
+  const { clients, loading: clientsLoading, deleteClient, createClient } = useClients();
   const { artworks, loading: artworksLoading, refetch: refetchArtworks } = useArtworks();
-  const { locations, loading: locationsLoading, updateLocation, deleteLocation, createLocation } = useLocations();
-  const { createArtwork, updateArtwork, deleteArtwork } = useArtworkManagement();
+  const { locations, loading: locationsLoading, deleteLocation, createLocation } = useLocations();
+  const { createArtwork, deleteArtwork } = useArtworkManagement();
   const [activeTab, setActiveTab] = useState('dashboard');
   const [showNewProspect, setShowNewProspect] = useState(false);
   const [showNewClient, setShowNewClient] = useState(false);
   const [showNewArtwork, setShowNewArtwork] = useState(false);
   const [showNewLocation, setShowNewLocation] = useState(false);
-  const [editingItem, setEditingItem] = useState<any>(null);
 
   // Forms state
   const [prospectForm, setProspectForm] = useState({
@@ -48,7 +47,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onPageChange }) => {
     description: '',
     biographie_artiste: '',
     prix_location_mois: 0,
-    disponibilite: 'Disponible' as const,
+    disponibilite: 'Disponible' as 'Disponible' | 'Réservé' | 'En rotation',
     url_image: ''
   });
 
@@ -101,7 +100,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onPageChange }) => {
   const handleCreateProspect = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const { data, error } = await supabase
+      const { error } = await supabase
         .from('prospects')
         .insert([prospectForm])
         .select()
@@ -156,7 +155,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onPageChange }) => {
         description: '',
         biographie_artiste: '',
         prix_location_mois: 0,
-        disponibilite: 'Disponible',
+        disponibilite: 'Disponible' as 'Disponible' | 'Réservé' | 'En rotation',
         url_image: ''
       });
       setShowNewArtwork(false);
@@ -437,13 +436,13 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onPageChange }) => {
                             <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                               <div className="flex space-x-2">
                                 <button 
-                                  onClick={() => setEditingItem(prospect)}
+                                  onClick={() => console.log('View prospect:', prospect)}
                                   className="text-blue-600 hover:text-blue-900"
                                 >
                                   <Eye className="h-4 w-4" />
                                 </button>
                                 <button 
-                                  onClick={() => setEditingItem(prospect)}
+                                  onClick={() => console.log('Edit prospect:', prospect)}
                                   className="text-yellow-600 hover:text-yellow-900"
                                 >
                                   <Edit className="h-4 w-4" />
@@ -525,13 +524,13 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onPageChange }) => {
                             <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                               <div className="flex space-x-2">
                                 <button 
-                                  onClick={() => setEditingItem(client)}
+                                  onClick={() => console.log('View client:', client)}
                                   className="text-blue-600 hover:text-blue-900"
                                 >
                                   <Eye className="h-4 w-4" />
                                 </button>
                                 <button 
-                                  onClick={() => setEditingItem(client)}
+                                  onClick={() => console.log('Edit client:', client)}
                                   className="text-yellow-600 hover:text-yellow-900"
                                 >
                                   <Edit className="h-4 w-4" />
@@ -591,14 +590,14 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onPageChange }) => {
                         <p className="text-lg font-semibold text-yellow-600 mb-3">{artwork.prix_location_mois}€/mois</p>
                         <div className="flex space-x-2">
                           <button 
-                            onClick={() => setEditingItem(artwork)}
+                            onClick={() => console.log('View artwork:', artwork)}
                             className="flex-1 bg-blue-600 text-white py-2 px-3 rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center space-x-1"
                           >
                             <Eye className="h-4 w-4" />
                             <span>Voir</span>
                           </button>
                           <button 
-                            onClick={() => setEditingItem(artwork)}
+                            onClick={() => console.log('Edit artwork:', artwork)}
                             className="flex-1 bg-yellow-600 text-white py-2 px-3 rounded-lg hover:bg-yellow-700 transition-colors flex items-center justify-center space-x-1"
                           >
                             <Edit className="h-4 w-4" />
@@ -691,13 +690,13 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onPageChange }) => {
                               <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                 <div className="flex space-x-2">
                                   <button 
-                                    onClick={() => setEditingItem(location)}
+                                    onClick={() => console.log('View location:', location)}
                                     className="text-blue-600 hover:text-blue-900"
                                   >
                                     <Eye className="h-4 w-4" />
                                   </button>
                                   <button 
-                                    onClick={() => setEditingItem(location)}
+                                    onClick={() => console.log('Edit location:', location)}
                                     className="text-yellow-600 hover:text-yellow-900"
                                   >
                                     <Edit className="h-4 w-4" />
@@ -920,8 +919,344 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onPageChange }) => {
           </div>
         )}
 
-        {/* Similar modals for Client, Artwork, Location... */}
-        {/* Add other modals here following the same pattern */}
+        {/* New Client Modal */}
+        {showNewClient && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+            <div className="bg-white rounded-lg max-w-md w-full">
+              <div className="p-6">
+                <div className="flex justify-between items-center mb-6">
+                  <h3 className="text-xl font-bold text-gray-800">Nouveau Client</h3>
+                  <button
+                    onClick={() => setShowNewClient(false)}
+                    className="text-gray-500 hover:text-gray-700"
+                  >
+                    <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                </div>
+
+                <form onSubmit={handleCreateClient} className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Nom *</label>
+                    <input
+                      type="text"
+                      value={clientForm.nom}
+                      onChange={(e) => setClientForm({...clientForm, nom: e.target.value})}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent"
+                      required
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Entreprise *</label>
+                    <input
+                      type="text"
+                      value={clientForm.entreprise}
+                      onChange={(e) => setClientForm({...clientForm, entreprise: e.target.value})}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent"
+                      required
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Email *</label>
+                    <input
+                      type="email"
+                      value={clientForm.email}
+                      onChange={(e) => setClientForm({...clientForm, email: e.target.value})}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent"
+                      required
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Téléphone</label>
+                    <input
+                      type="tel"
+                      value={clientForm.telephone}
+                      onChange={(e) => setClientForm({...clientForm, telephone: e.target.value})}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Adresse</label>
+                    <textarea
+                      value={clientForm.adresse}
+                      onChange={(e) => setClientForm({...clientForm, adresse: e.target.value})}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent"
+                      rows={3}
+                    />
+                  </div>
+
+                  <div className="flex space-x-4">
+                    <button
+                      type="submit"
+                      className="flex-1 bg-yellow-600 text-white py-2 px-4 rounded-lg hover:bg-yellow-700 transition-colors"
+                    >
+                      Créer
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setShowNewClient(false)}
+                      className="flex-1 bg-gray-300 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-400 transition-colors"
+                    >
+                      Annuler
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* New Artwork Modal */}
+        {showNewArtwork && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+            <div className="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+              <div className="p-6">
+                <div className="flex justify-between items-center mb-6">
+                  <h3 className="text-xl font-bold text-gray-800">Nouvelle Œuvre</h3>
+                  <button
+                    onClick={() => setShowNewArtwork(false)}
+                    className="text-gray-500 hover:text-gray-700"
+                  >
+                    <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                </div>
+
+                <form onSubmit={handleCreateArtwork} className="space-y-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Titre *</label>
+                      <input
+                        type="text"
+                        value={artworkForm.titre}
+                        onChange={(e) => setArtworkForm({...artworkForm, titre: e.target.value})}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent"
+                        required
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Artiste *</label>
+                      <input
+                        type="text"
+                        value={artworkForm.artiste}
+                        onChange={(e) => setArtworkForm({...artworkForm, artiste: e.target.value})}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent"
+                        required
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Date</label>
+                      <input
+                        type="text"
+                        value={artworkForm.date}
+                        onChange={(e) => setArtworkForm({...artworkForm, date: e.target.value})}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent"
+                        placeholder="ex: 1503-1506"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Courant artistique</label>
+                      <input
+                        type="text"
+                        value={artworkForm.courant_artistique}
+                        onChange={(e) => setArtworkForm({...artworkForm, courant_artistique: e.target.value})}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent"
+                        placeholder="ex: Renaissance"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Description</label>
+                    <textarea
+                      value={artworkForm.description}
+                      onChange={(e) => setArtworkForm({...artworkForm, description: e.target.value})}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent"
+                      rows={3}
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Biographie de l'artiste</label>
+                    <textarea
+                      value={artworkForm.biographie_artiste}
+                      onChange={(e) => setArtworkForm({...artworkForm, biographie_artiste: e.target.value})}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent"
+                      rows={3}
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Prix location/mois (€) *</label>
+                      <input
+                        type="number"
+                        value={artworkForm.prix_location_mois}
+                        onChange={(e) => setArtworkForm({...artworkForm, prix_location_mois: Number(e.target.value)})}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent"
+                        required
+                        min="0"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Disponibilité</label>
+                      <select
+                        value={artworkForm.disponibilite}
+                        onChange={(e) => setArtworkForm({...artworkForm, disponibilite: e.target.value as 'Disponible' | 'Réservé' | 'En rotation'})}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent"
+                      >
+                        <option value="Disponible">Disponible</option>
+                        <option value="Réservé">Réservé</option>
+                        <option value="En rotation">En rotation</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">URL de l'image</label>
+                    <input
+                      type="url"
+                      value={artworkForm.url_image}
+                      onChange={(e) => setArtworkForm({...artworkForm, url_image: e.target.value})}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent"
+                      placeholder="https://..."
+                    />
+                  </div>
+
+                  <div className="flex space-x-4">
+                    <button
+                      type="submit"
+                      className="flex-1 bg-yellow-600 text-white py-2 px-4 rounded-lg hover:bg-yellow-700 transition-colors"
+                    >
+                      Créer
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setShowNewArtwork(false)}
+                      className="flex-1 bg-gray-300 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-400 transition-colors"
+                    >
+                      Annuler
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* New Location Modal */}
+        {showNewLocation && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+            <div className="bg-white rounded-lg max-w-md w-full">
+              <div className="p-6">
+                <div className="flex justify-between items-center mb-6">
+                  <h3 className="text-xl font-bold text-gray-800">Nouvelle Location</h3>
+                  <button
+                    onClick={() => setShowNewLocation(false)}
+                    className="text-gray-500 hover:text-gray-700"
+                  >
+                    <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                </div>
+
+                <form onSubmit={handleCreateLocation} className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Client *</label>
+                    <select
+                      value={locationForm.client_id}
+                      onChange={(e) => setLocationForm({...locationForm, client_id: e.target.value})}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent"
+                      required
+                    >
+                      <option value="">Sélectionner un client</option>
+                      {clients?.map(client => (
+                        <option key={client.id} value={client.id}>{client.nom} - {client.entreprise}</option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Œuvre *</label>
+                    <select
+                      value={locationForm.artwork_id}
+                      onChange={(e) => setLocationForm({...locationForm, artwork_id: e.target.value})}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent"
+                      required
+                    >
+                      <option value="">Sélectionner une œuvre</option>
+                      {artworks?.filter(artwork => artwork.disponibilite === 'Disponible').map(artwork => (
+                        <option key={artwork.id} value={artwork.id}>{artwork.titre} - {artwork.artiste}</option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Date de début *</label>
+                    <input
+                      type="date"
+                      value={locationForm.date_debut}
+                      onChange={(e) => setLocationForm({...locationForm, date_debut: e.target.value})}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent"
+                      required
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Date de fin</label>
+                    <input
+                      type="date"
+                      value={locationForm.date_fin}
+                      onChange={(e) => setLocationForm({...locationForm, date_fin: e.target.value})}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Prix mensuel (€) *</label>
+                    <input
+                      type="number"
+                      value={locationForm.prix_mensuel}
+                      onChange={(e) => setLocationForm({...locationForm, prix_mensuel: Number(e.target.value)})}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent"
+                      required
+                      min="0"
+                    />
+                  </div>
+
+                  <div className="flex space-x-4">
+                    <button
+                      type="submit"
+                      className="flex-1 bg-yellow-600 text-white py-2 px-4 rounded-lg hover:bg-yellow-700 transition-colors"
+                    >
+                      Créer
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setShowNewLocation(false)}
+                      className="flex-1 bg-gray-300 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-400 transition-colors"
+                    >
+                      Annuler
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
