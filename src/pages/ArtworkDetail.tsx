@@ -133,11 +133,14 @@ const ArtworkDetail: React.FC = () => {
   const handleAddToCart = () => {
     if (artwork) {
       addToCart({
+        artworkId: artwork.id,
         title: artwork.titre,
         artist: artwork.artiste,
-        price: artwork.prix_location_mois,
         image: artwork.url_image,
-        duration: selectedDuration
+        pricePerMonth: artwork.prix_location_mois,
+        duration: selectedDuration,
+        startDate: new Date().toISOString().split('T')[0],
+        endDate: new Date(Date.now() + selectedDuration * 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]
       });
     }
   };
