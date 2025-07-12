@@ -27,8 +27,15 @@ const Artists: React.FC = () => {
 
   const fetchArtists = async () => {
     try {
-      // Mock data for now - replace with real Supabase query when artists table is created
-      const mockArtists: Artist[] = [
+      const { data, error } = await supabase
+        .from('user_profiles')
+        .select('*')
+        .eq('role', 'artist');
+
+      if (error || !data || data.length === 0) {
+        console.log('Using mock data for artists:', error?.message || 'No artists found');
+        // Mock data fallback
+        const mockArtists: Artist[] = [
         {
           id: '1',
           name: 'Marie Dubois',
@@ -71,9 +78,23 @@ const Artists: React.FC = () => {
           avatar: 'https://images.pexels.com/photos/1043471/pexels-photo-1043471.jpeg?auto=compress&cs=tinysrgb&w=400',
           artworks_count: 28
         }
-      ];
-      
-      setArtists(mockArtists);
+        ];
+        
+        setArtists(mockArtists);
+      } else {
+        const formattedArtists: Artist[] = data.map(artist => ({
+          id: artist.id,
+          name: artist.nom || 'Artiste',
+          bio: artist.bio || 'Artiste professionnel',
+          location: artist.ville || 'France',
+          speciality: artist.specialite || 'Art Contemporain',
+          experience: artist.experience || 'Non spécifié',
+          website: artist.portfolio || undefined,
+          avatar: artist.avatar || 'https://images.pexels.com/photos/1239291/pexels-photo-1239291.jpeg?auto=compress&cs=tinysrgb&w=400',
+          artworks_count: 0
+        }));
+        setArtists(formattedArtists);
+      }
     } catch (error) {
       console.error('Erreur lors du chargement des artistes:', error);
     } finally {

@@ -316,7 +316,7 @@ const Gallery: React.FC = () => {
                   
                   <div className="flex space-x-2">
                     <Link
-                      to={`/artwork/${artwork.id}`}
+                      to={`/oeuvre/${artwork.id}`}
                       className="flex-1 bg-gray-100 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-200 transition-colors flex items-center justify-center space-x-1"
                     >
                       <Eye className="h-4 w-4" />
@@ -401,7 +401,7 @@ const Gallery: React.FC = () => {
                       
                       <div className="flex space-x-3">
                         <Link
-                          to={`/artwork/${artwork.id}`}
+                          to={`/oeuvre/${artwork.id}`}
                           className="bg-gray-100 text-gray-700 py-2 px-6 rounded-lg hover:bg-gray-200 transition-colors flex items-center space-x-2"
                         >
                           <Eye className="h-4 w-4" />
