@@ -583,8 +583,6 @@ export const useCreateNewsletterSubscriber = () => {
     setError(null);
 
     try {
-      console.log('Creating newsletter subscriber:', subscriberData);
-      
       const { data, error } = await supabase
         .from('newsletter_subscribers')
         .insert([{
@@ -601,7 +599,6 @@ export const useCreateNewsletterSubscriber = () => {
         console.error('Supabase error newsletter:', error);
         throw error;
       }
-      console.log('Newsletter subscriber created successfully:', data);
       return data;
     } catch (err) {
       console.error('Error in createSubscriber:', err);
