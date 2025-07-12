@@ -99,7 +99,6 @@ const ArtworkDetail: React.FC = () => {
           url: window.location.href,
         });
       } catch (error) {
-        console.log('Partage annulé');
       }
     } else {
       // Fallback: copy to clipboard

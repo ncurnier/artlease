@@ -31,7 +31,6 @@ const Contact: React.FC = () => {
         source: 'Contact'
       };
       
-      console.log('Envoi des données prospect:', prospectData);
       await createProspect(prospectData);
 
       // Si l'utilisateur souhaite s'abonner à la newsletter

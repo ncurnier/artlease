@@ -13,7 +13,6 @@ export const useArtworks = () => {
   const fetchArtworks = async () => {
     try {
       setLoading(true);
-      console.log('Fetching artworks...');
       const { data, error } = await supabase
         .from('artworks')
         .select('*')
@@ -23,7 +22,6 @@ export const useArtworks = () => {
         console.error('Supabase error:', error);
         throw error;
       }
-      console.log('Artworks fetched:', data?.length);
       setArtworks(data || []);
     } catch (err) {
       console.error('Error fetching artworks:', err);
@@ -49,7 +47,6 @@ export const useFormules = () => {
   const fetchFormules = async () => {
     try {
       setLoading(true);
-      console.log('Fetching formules...');
       const { data, error } = await supabase
         .from('formules')
         .select('*')
@@ -59,7 +56,6 @@ export const useFormules = () => {
         console.error('Supabase error:', error);
         throw error;
       }
-      console.log('Formules fetched:', data?.length);
       setFormules(data || []);
     } catch (err) {
       console.error('Error fetching formules:', err);
@@ -85,7 +81,6 @@ export const useProspects = () => {
   const fetchProspects = async () => {
     try {
       setLoading(true);
-      console.log('Fetching prospects...');
       const { data, error } = await supabase
         .from('prospects')
         .select('*')
@@ -95,7 +90,6 @@ export const useProspects = () => {
         console.error('Supabase error:', error);
         throw error;
       }
-      console.log('Prospects fetched:', data?.length);
       setProspects(data || []);
     } catch (err) {
       console.error('Error fetching prospects:', err);
@@ -107,7 +101,6 @@ export const useProspects = () => {
 
   const updateProspect = async (id: string, updates: Partial<Tables['prospects']['Update']>) => {
     try {
-      console.log('Updating prospect:', id, updates);
       const { data, error } = await supabase
         .from('prospects')
         .update(updates)
@@ -128,7 +121,6 @@ export const useProspects = () => {
 
   const deleteProspect = async (id: string) => {
     try {
-      console.log('Deleting prospect:', id);
       const { error } = await supabase
         .from('prospects')
         .delete()
@@ -160,7 +152,6 @@ export const useClients = () => {
   const fetchClients = async () => {
     try {
       setLoading(true);
-      console.log('Fetching clients...');
       const { data, error } = await supabase
         .from('clients')
         .select('*')
@@ -170,7 +161,6 @@ export const useClients = () => {
         console.error('Supabase error:', error);
         throw error;
       }
-      console.log('Clients fetched:', data?.length);
       setClients(data || []);
     } catch (err) {
       console.error('Error fetching clients:', err);
@@ -182,7 +172,6 @@ export const useClients = () => {
 
   const updateClient = async (id: string, updates: Partial<Tables['clients']['Update']>) => {
     try {
-      console.log('Updating client:', id, updates);
       const { data, error } = await supabase
         .from('clients')
         .update(updates)
@@ -202,7 +191,6 @@ export const useClients = () => {
 
   const deleteClient = async (id: string) => {
     try {
-      console.log('Deleting client:', id);
       const { error } = await supabase
         .from('clients')
         .delete()
@@ -219,7 +207,6 @@ export const useClients = () => {
 
   const createClient = async (clientData: Tables['clients']['Insert']) => {
     try {
-      console.log('Creating client:', clientData);
       const { data, error } = await supabase
         .from('clients')
         .insert([clientData])
@@ -252,7 +239,6 @@ export const useLocations = () => {
   const fetchLocations = async () => {
     try {
       setLoading(true);
-      console.log('Fetching locations...');
       const { data, error } = await supabase
         .from('locations')
         .select('*')
@@ -262,7 +248,6 @@ export const useLocations = () => {
         console.error('Supabase error:', error);
         throw error;
       }
-      console.log('Locations fetched:', data?.length);
       setLocations(data || []);
     } catch (err) {
       console.error('Error fetching locations:', err);
@@ -274,7 +259,6 @@ export const useLocations = () => {
 
   const updateLocation = async (id: string, updates: Partial<Tables['locations']['Update']>) => {
     try {
-      console.log('Updating location:', id, updates);
       const { data, error } = await supabase
         .from('locations')
         .update(updates)
@@ -294,7 +278,6 @@ export const useLocations = () => {
 
   const deleteLocation = async (id: string) => {
     try {
-      console.log('Deleting location:', id);
       const { error } = await supabase
         .from('locations')
         .delete()
@@ -311,7 +294,6 @@ export const useLocations = () => {
 
   const createLocation = async (locationData: Tables['locations']['Insert']) => {
     try {
-      console.log('Creating location:', locationData);
       const { data, error } = await supabase
         .from('locations')
         .insert([locationData])
@@ -345,7 +327,6 @@ export const useCreateProspect = () => {
     setError(null);
 
     try {
-      console.log('Creating prospect:', prospectData);
       const { data, error } = await supabase
         .from('prospects')
         .insert([prospectData])
@@ -356,7 +337,6 @@ export const useCreateProspect = () => {
         console.error('Supabase error:', error);
         throw error;
       }
-      console.log('Prospect created successfully:', data);
       return data;
     } catch (err) {
       console.error('Error in createProspect:', err);
@@ -381,7 +361,6 @@ export const useArtworkManagement = () => {
     setError(null);
 
     try {
-      console.log('Creating artwork:', artworkData);
       const { data, error } = await supabase
         .from('artworks')
         .insert([artworkData])
@@ -389,7 +368,6 @@ export const useArtworkManagement = () => {
         .single();
 
       if (error) throw error;
-      console.log('Artwork created successfully:', data);
       return data;
     } catch (err) {
       console.error('Error creating artwork:', err);
@@ -406,7 +384,6 @@ export const useArtworkManagement = () => {
     setError(null);
 
     try {
-      console.log('Updating artwork:', id, updates);
       const { data, error } = await supabase
         .from('artworks')
         .update(updates)
@@ -415,7 +392,6 @@ export const useArtworkManagement = () => {
         .single();
 
       if (error) throw error;
-      console.log('Artwork updated successfully:', data);
       return data;
     } catch (err) {
       console.error('Error updating artwork:', err);
@@ -432,14 +408,12 @@ export const useArtworkManagement = () => {
     setError(null);
 
     try {
-      console.log('Deleting artwork:', id);
       const { error } = await supabase
         .from('artworks')
         .delete()
         .eq('id', id);
 
       if (error) throw error;
-      console.log('Artwork deleted successfully');
     } catch (err) {
       console.error('Error deleting artwork:', err);
       const errorMessage = err instanceof Error ? err.message : 'Erreur lors de la suppression de l\'œuvre';
@@ -463,7 +437,6 @@ export const useNewsletterData = () => {
   const fetchNewsletterData = async () => {
     try {
       setLoading(true);
-      console.log('Fetching newsletter data...');
       
       // Récupérer les abonnés
       const { data: subscribersData, error: subscribersError } = await supabase
@@ -487,7 +460,6 @@ export const useNewsletterData = () => {
         throw campaignsError;
       }
 
-      console.log('Newsletter data fetched:', { subscribers: subscribersData?.length, campaigns: campaignsData?.length });
       setSubscribers(subscribersData || []);
       setCampaigns(campaignsData || []);
     } catch (err) {
@@ -500,7 +472,6 @@ export const useNewsletterData = () => {
 
   const createCampaign = async (campaignData: any) => {
     try {
-      console.log('Creating campaign:', campaignData);
       const { data, error } = await supabase
         .from('newsletter_campaigns')
         .insert([{
@@ -514,7 +485,6 @@ export const useNewsletterData = () => {
         .single();
 
       if (error) throw error;
-      console.log('Campaign created successfully:', data);
       setCampaigns(prev => [data, ...prev]);
       return data;
     } catch (err) {
@@ -525,7 +495,6 @@ export const useNewsletterData = () => {
 
   const createSubscriber = async (subscriberData: any) => {
     try {
-      console.log('Creating subscriber:', subscriberData);
       const { data, error } = await supabase
         .from('newsletter_subscribers')
         .insert([{
@@ -539,7 +508,6 @@ export const useNewsletterData = () => {
         .single();
 
       if (error) throw error;
-      console.log('Subscriber created successfully:', data);
       setSubscribers(prev => [data, ...prev]);
       return data;
     } catch (err) {
@@ -550,7 +518,6 @@ export const useNewsletterData = () => {
 
   const updateSubscriber = async (id: string, updates: any) => {
     try {
-      console.log('Updating subscriber:', id, updates);
       const { data, error } = await supabase
         .from('newsletter_subscribers')
         .update(updates)
@@ -569,8 +536,7 @@ export const useNewsletterData = () => {
   };
 
   const deleteSubscriber = async (id: string) => {
-    try {
-      console.log('Deleting subscriber:', id);
+    try {;
       const { error } = await supabase
         .from('newsletter_subscribers')
         .delete()
@@ -617,8 +583,6 @@ export const useCreateNewsletterSubscriber = () => {
     setError(null);
 
     try {
-      console.log('Creating newsletter subscriber:', subscriberData);
-      
       const { data, error } = await supabase
         .from('newsletter_subscribers')
         .insert([{
@@ -635,7 +599,6 @@ export const useCreateNewsletterSubscriber = () => {
         console.error('Supabase error newsletter:', error);
         throw error;
       }
-      console.log('Newsletter subscriber created successfully:', data);
       return data;
     } catch (err) {
       console.error('Error in createSubscriber:', err);
