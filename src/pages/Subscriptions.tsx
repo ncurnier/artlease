@@ -106,7 +106,6 @@ const Subscriptions: React.FC = () => {
   const handleSelectPlan = (planId: string) => {
     setSelectedPlan(planId);
     // Here you would typically redirect to checkout or open a modal
-    console.log('Plan sélectionné:', planId);
   };
 
   if (loading) {

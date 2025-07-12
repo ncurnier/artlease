@@ -12,7 +12,6 @@ const Footer: React.FC = () => {
     if (!email) return;
 
     try {
-      console.log('Inscription newsletter pour:', email);
       await createSubscriber({ email, source: 'Site web' });
       setIsSubscribed(true);
       setEmail('');

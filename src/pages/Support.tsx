@@ -90,7 +90,6 @@ const Support: React.FC = () => {
   const handleContactSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     // Here you would typically send the form data to your backend
-    console.log('Contact form submitted:', contactForm);
     // Reset form
     setContactForm({
       name: '',
