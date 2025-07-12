@@ -78,17 +78,17 @@ const Home: React.FC = () => {
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
                 <Link 
-                  to="/gallery"
+                  to="/oeuvres"
                   className="bg-yellow-600 hover:bg-yellow-700 text-white px-8 py-4 rounded-lg font-semibold flex items-center justify-center space-x-2 transition-all transform hover:scale-105"
                 >
                   <span>Explorer la Galerie</span>
                   <ArrowRight className="h-5 w-5" />
                 </Link>
                 <Link 
-                  to="/subscriptions"
+                  to="/contact"
                   className="border-2 border-yellow-600 text-yellow-400 hover:bg-yellow-600 hover:text-white px-8 py-4 rounded-lg font-semibold transition-all"
                 >
-                  Découvrir nos Offres
+                  Nous Contacter
                 </Link>
               </div>
             </motion.div>
@@ -226,17 +226,17 @@ const Home: React.FC = () => {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link 
-                to="/gallery"
+                to="/oeuvres"
                 className="bg-white text-yellow-600 hover:bg-gray-100 px-8 py-4 rounded-lg font-semibold text-lg transition-colors inline-flex items-center justify-center space-x-2"
               >
                 <TrendingUp className="h-5 w-5" />
                 <span>Commencer Maintenant</span>
               </Link>
               <Link 
-                to="/support"
+                to="/contact"
                 className="border-2 border-white text-white hover:bg-white hover:text-yellow-600 px-8 py-4 rounded-lg font-semibold text-lg transition-colors"
               >
-                Parler à un Expert
+                Nous Contacter
               </Link>
             </div>
           </motion.div>

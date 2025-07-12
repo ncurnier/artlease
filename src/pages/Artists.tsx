@@ -27,7 +27,86 @@ const Artists: React.FC = () => {
 
   const fetchArtists = async () => {
     try {
-      // Mock data for now - replace with real Supabase query when artists table is created
+      console.log('Fetching artists...');
+      
+      const timeoutPromise = new Promise((_, reject) => {
+        setTimeout(() => reject(new Error('Database query timeout')), 10000); // 10 second timeout
+      });
+      
+      const queryPromise = supabase
+        .from('user_profiles')
+        .select('*')
+        .eq('role', 'artist');
+      
+      const { data, error } = await Promise.race([queryPromise, timeoutPromise]) as any;
+
+      if (error || !data || data.length === 0) {
+        console.log('Using mock data for artists:', error?.message || 'No artists found');
+        // Mock data fallback
+        const mockArtists: Artist[] = [
+        {
+          id: '1',
+          name: 'Marie Dubois',
+          bio: 'Artiste contemporaine spécialisée dans l\'art abstrait et les installations.',
+          location: 'Paris, France',
+          speciality: 'Art Contemporain',
+          experience: '15 ans',
+          website: 'https://mariedubois.art',
+          avatar: 'https://images.pexels.com/photos/1239291/pexels-photo-1239291.jpeg?auto=compress&cs=tinysrgb&w=400',
+          artworks_count: 24
+        },
+        {
+          id: '2',
+          name: 'Jean-Pierre Martin',
+          bio: 'Sculpteur reconnu, travaille principalement avec le bronze et le marbre.',
+          location: 'Lyon, France',
+          speciality: 'Sculpture',
+          experience: '20 ans',
+          avatar: 'https://images.pexels.com/photos/1222271/pexels-photo-1222271.jpeg?auto=compress&cs=tinysrgb&w=400',
+          artworks_count: 18
+        },
+        {
+          id: '3',
+          name: 'Sophie Chen',
+          bio: 'Photographe d\'art, explore les thèmes de l\'identité et de la mémoire.',
+          location: 'Marseille, France',
+          speciality: 'Photographie',
+          experience: '12 ans',
+          website: 'https://sophiechen.photo',
+          avatar: 'https://images.pexels.com/photos/1130626/pexels-photo-1130626.jpeg?auto=compress&cs=tinysrgb&w=400',
+          artworks_count: 32
+        },
+        {
+          id: '4',
+          name: 'Alexandre Rousseau',
+          bio: 'Peintre impressionniste moderne, inspiré par les paysages urbains.',
+          location: 'Bordeaux, France',
+          speciality: 'Peinture',
+          experience: '18 ans',
+          avatar: 'https://images.pexels.com/photos/1043471/pexels-photo-1043471.jpeg?auto=compress&cs=tinysrgb&w=400',
+          artworks_count: 28
+        }
+        ];
+        
+        setArtists(mockArtists);
+      } else {
+        const formattedArtists: Artist[] = data.map((artist: any) => ({
+          id: artist.id,
+          name: artist.nom || 'Artiste',
+          bio: artist.bio || 'Artiste professionnel',
+          location: artist.ville || 'France',
+          speciality: artist.specialite || 'Art Contemporain',
+          experience: artist.experience || 'Non spécifié',
+          website: artist.portfolio || undefined,
+          avatar: artist.avatar || 'https://images.pexels.com/photos/1239291/pexels-photo-1239291.jpeg?auto=compress&cs=tinysrgb&w=400',
+          artworks_count: 0
+        }));
+        setArtists(formattedArtists);
+      }
+    } catch (error) {
+      console.error('Erreur lors du chargement des artistes:', error);
+      console.log('Using fallback mock data due to error:', error);
+      
       const mockArtists: Artist[] = [
         {
           id: '1',
@@ -72,11 +151,9 @@ const Artists: React.FC = () => {
           artworks_count: 28
         }
       ];
-      
       setArtists(mockArtists);
-    } catch (error) {
-      console.error('Erreur lors du chargement des artistes:', error);
     } finally {
+      console.log('Setting artists loading to false');
       setLoading(false);
     }
   };

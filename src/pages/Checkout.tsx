@@ -1,11 +1,23 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { CreditCard, Lock, Truck, Calendar, Check } from 'lucide-react';
+import { CreditCard, Lock, Truck, Check } from 'lucide-react';
 import { useCart } from '../contexts/CartContext';
 import { useAuth } from '../contexts/AuthContext';
 
+interface CartItem {
+  id: string;
+  artworkId: string;
+  title: string;
+  artist: string;
+  image: string;
+  pricePerMonth: number;
+  duration: number;
+  startDate: string;
+  endDate: string;
+}
+
 const Checkout: React.FC = () => {
-  const { cartItems, getTotalPrice, clearCart } = useCart();
+  const { items, getTotalPrice, clearCart } = useCart();
   const { user } = useAuth();
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({
@@ -59,7 +71,7 @@ const Checkout: React.FC = () => {
     if (step > 1) setStep(step - 1);
   };
 
-  if (cartItems.length === 0 && step !== 4) {
+  if (items.length === 0 && step !== 4) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
@@ -491,7 +503,7 @@ const Checkout: React.FC = () => {
                 </h3>
                 
                 <div className="space-y-4">
-                  {cartItems.map(item => (
+                  {items.map((item: CartItem) => (
                     <div key={item.id} className="flex items-center space-x-3">
                       <img
                         src={item.image}
@@ -507,7 +519,7 @@ const Checkout: React.FC = () => {
                         </p>
                       </div>
                       <span className="font-semibold text-gray-900">
-                        {item.price * item.duration}€
+                        {item.pricePerMonth * item.duration}€
                       </span>
                     </div>
                   ))}

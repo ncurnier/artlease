@@ -32,7 +32,7 @@ interface Artwork {
 const ArtworkDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const { addToCart, isInCart } = useCart();
+  const { addToCart } = useCart();
   const [artwork, setArtwork] = useState<Artwork | null>(null);
   const [loading, setLoading] = useState(true);
   const [isFavorite, setIsFavorite] = useState(false);
@@ -46,33 +46,86 @@ const ArtworkDetail: React.FC = () => {
 
   const fetchArtwork = async (artworkId: string) => {
     try {
-      const { data, error } = await supabase
+      console.log('Fetching artwork with ID:', artworkId);
+      
+      const timeoutPromise = new Promise((_, reject) => {
+        setTimeout(() => reject(new Error('Database query timeout')), 10000); // 10 second timeout
+      });
+      
+      const queryPromise = supabase
         .from('artworks')
         .select('*')
         .eq('id', artworkId)
         .single();
+      
+      const { data, error } = await Promise.race([queryPromise, timeoutPromise]) as any;
 
-      if (error) throw error;
+      if (error) {
+        console.error('Supabase error:', error);
+        throw error;
+      }
+      
+      console.log('Artwork fetched successfully:', data);
       setArtwork(data);
     } catch (error) {
       console.error('Erreur lors du chargement de l\'œuvre:', error);
+      console.log('Using fallback sample data for artwork ID:', artworkId);
       
-      // Mock data for demo
-      const mockArtwork: Artwork = {
+      const sampleArtworks: { [key: string]: Artwork } = {
+        '1': {
+          id: '1',
+          titre: 'La Joconde (Reproduction)',
+          artiste: 'Léonard de Vinci',
+          date: '1503',
+          courant_artistique: 'Renaissance',
+          description: 'Reproduction fidèle du chef-d\'œuvre de la Renaissance italienne. Cette œuvre emblématique capture le mystère et la beauté intemporelle du portrait le plus célèbre au monde.',
+          biographie_artiste: 'Léonard de Vinci (1452-1519) était un polymathe italien de la Renaissance, reconnu comme l\'un des plus grands génies de l\'humanité.',
+          prix_location_mois: 2500,
+          disponibilite: 'Disponible',
+          url_image: 'https://images.pexels.com/photos/1070945/pexels-photo-1070945.jpeg?auto=compress&cs=tinysrgb&w=800'
+        },
+        '2': {
+          id: '2',
+          titre: 'La Nuit étoilée (Reproduction)',
+          artiste: 'Vincent van Gogh',
+          date: '1889',
+          courant_artistique: 'Post-impressionnisme',
+          description: 'Reproduction de l\'œuvre emblématique du post-impressionnisme. Cette peinture capture la beauté tourbillonnante du ciel nocturne avec une intensité émotionnelle unique.',
+          biographie_artiste: 'Vincent van Gogh (1853-1890) était un peintre post-impressionniste néerlandais dont l\'œuvre a profondément influencé l\'art du XXe siècle.',
+          prix_location_mois: 2200,
+          disponibilite: 'Disponible',
+          url_image: 'https://images.pexels.com/photos/1070946/pexels-photo-1070946.jpeg?auto=compress&cs=tinysrgb&w=800'
+        },
+        '3': {
+          id: '3',
+          titre: 'La Jeune Fille à la perle (Reproduction)',
+          artiste: 'Johannes Vermeer',
+          date: '1665',
+          courant_artistique: 'Baroque hollandais',
+          description: 'Reproduction de ce portrait mystérieux du maître hollandais. Cette œuvre captivante révèle la maîtrise technique exceptionnelle de Vermeer dans le traitement de la lumière.',
+          biographie_artiste: 'Johannes Vermeer (1632-1675) était un peintre baroque hollandais, spécialisé dans les scènes de genre domestique de la classe moyenne.',
+          prix_location_mois: 1800,
+          disponibilite: 'Disponible',
+          url_image: 'https://images.pexels.com/photos/1070947/pexels-photo-1070947.jpeg?auto=compress&cs=tinysrgb&w=800'
+        }
+      };
+      
+      const mockArtwork = sampleArtworks[artworkId] || {
         id: artworkId,
-        titre: 'Abstraction Moderne #3',
-        artiste: 'Marie Dubois',
+        titre: 'Œuvre d\'Art Classique',
+        artiste: 'Artiste Renommé',
         date: '2023',
         courant_artistique: 'Art Contemporain',
-        description: 'Une œuvre abstraite captivante qui explore les relations entre couleur et forme. Cette pièce unique combine des techniques traditionnelles avec une approche moderne, créant un dialogue visuel riche et complexe.',
-        biographie_artiste: 'Marie Dubois est une artiste contemporaine française reconnue pour ses œuvres abstraites. Diplômée des Beaux-Arts de Paris, elle expose régulièrement dans les galeries européennes.',
-        prix_location_mois: 150,
+        description: 'Une œuvre d\'art exceptionnelle qui capture l\'essence de la beauté artistique moderne.',
+        biographie_artiste: 'Un artiste talentueux reconnu pour ses contributions significatives au monde de l\'art contemporain.',
+        prix_location_mois: 1500,
         disponibilite: 'Disponible',
         url_image: 'https://images.pexels.com/photos/1183992/pexels-photo-1183992.jpeg?auto=compress&cs=tinysrgb&w=800'
       };
       
       setArtwork(mockArtwork);
     } finally {
+      console.log('Setting artwork loading to false');
       setLoading(false);
     }
   };
@@ -80,12 +133,14 @@ const ArtworkDetail: React.FC = () => {
   const handleAddToCart = () => {
     if (artwork) {
       addToCart({
-        id: artwork.id,
+        artworkId: artwork.id,
         title: artwork.titre,
         artist: artwork.artiste,
-        price: artwork.prix_location_mois,
         image: artwork.url_image,
-        duration: selectedDuration
+        pricePerMonth: artwork.prix_location_mois,
+        duration: selectedDuration,
+        startDate: new Date().toISOString().split('T')[0],
+        endDate: new Date(Date.now() + selectedDuration * 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]
       });
     }
   };
@@ -266,19 +321,15 @@ const ArtworkDetail: React.FC = () => {
             {/* Add to Cart Button */}
             <button
               onClick={handleAddToCart}
-              disabled={artwork.disponibilite !== 'Disponible' || isInCart(artwork.id)}
+              disabled={artwork.disponibilite !== 'Disponible'}
               className={`w-full py-4 px-6 rounded-xl font-semibold text-lg transition-colors ${
                 artwork.disponibilite !== 'Disponible'
                   ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                  : isInCart(artwork.id)
-                  ? 'bg-green-600 text-white'
                   : 'bg-amber-600 text-white hover:bg-amber-700'
               }`}
             >
               {artwork.disponibilite !== 'Disponible'
                 ? 'Non disponible'
-                : isInCart(artwork.id)
-                ? 'Ajouté au panier'
                 : 'Ajouter au panier'
               }
             </button>

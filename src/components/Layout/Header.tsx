@@ -14,10 +14,9 @@ const Header: React.FC = () => {
 
   const menuItems = [
     { path: '/', label: 'Accueil' },
-    { path: '/gallery', label: 'Œuvres' },
-    { path: '/artists', label: 'Artistes' },
-    { path: '/subscriptions', label: 'Offres & Abonnements' },
-    { path: '/support', label: 'Support / FAQ' },
+    { path: '/oeuvres', label: 'Œuvres' },
+    { path: '/artistes', label: 'Artistes' },
+    { path: '/contact', label: 'Contact' },
   ];
 
   const handleSignOut = async () => {

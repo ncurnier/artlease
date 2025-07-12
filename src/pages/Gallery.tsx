@@ -7,10 +7,21 @@ import { useCart } from '../contexts/CartContext';
 import { useAuth } from '../contexts/AuthContext';
 import toast from 'react-hot-toast';
 
+console.log('Gallery component file loaded');
+
 const Gallery: React.FC = () => {
+  console.log('Gallery component function called');
+  
   const { artworks, loading, error } = useArtworks();
+  console.log('useArtworks hook called - artworks:', artworks?.length || 0, 'loading:', loading, 'error:', error);
+  
   const { addToCart } = useCart();
+  console.log('useCart hook called');
+  
   const { user } = useAuth();
+  console.log('useAuth hook called');
+  
+  console.log('Gallery component rendering - artworks:', artworks?.length || 0, 'loading:', loading, 'error:', error);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
   const [selectedArtist, setSelectedArtist] = useState('');
@@ -113,7 +124,7 @@ const Gallery: React.FC = () => {
     );
   }
 
-  if (error) {
+  if (error && artworks.length === 0) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
@@ -316,7 +327,7 @@ const Gallery: React.FC = () => {
                   
                   <div className="flex space-x-2">
                     <Link
-                      to={`/artwork/${artwork.id}`}
+                      to={`/oeuvre/${artwork.id}`}
                       className="flex-1 bg-gray-100 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-200 transition-colors flex items-center justify-center space-x-1"
                     >
                       <Eye className="h-4 w-4" />
@@ -401,7 +412,7 @@ const Gallery: React.FC = () => {
                       
                       <div className="flex space-x-3">
                         <Link
-                          to={`/artwork/${artwork.id}`}
+                          to={`/oeuvre/${artwork.id}`}
                           className="bg-gray-100 text-gray-700 py-2 px-6 rounded-lg hover:bg-gray-200 transition-colors flex items-center space-x-2"
                         >
                           <Eye className="h-4 w-4" />
