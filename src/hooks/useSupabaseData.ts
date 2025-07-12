@@ -14,21 +14,174 @@ export const useArtworks = () => {
     try {
       setLoading(true);
       console.log('Fetching artworks...');
-      const { data, error } = await supabase
+      
+      const timeoutPromise = new Promise((_, reject) => {
+        setTimeout(() => reject(new Error('Database query timeout')), 10000); // 10 second timeout
+      });
+      
+      const queryPromise = supabase
         .from('artworks')
         .select('*')
         .order('created_at', { ascending: false });
+      
+      const { data, error } = await Promise.race([queryPromise, timeoutPromise]) as any;
 
       if (error) {
         console.error('Supabase error:', error);
-        throw error;
+        console.log('Database query failed, using fallback sample data');
+        
+        const sampleArtworks: Tables['artworks']['Row'][] = [
+          {
+            id: '1',
+            titre: 'La Joconde (Reproduction)',
+            artiste: 'Léonard de Vinci',
+            date: '1503',
+            courant_artistique: 'Renaissance',
+            description: 'Reproduction fidèle du chef-d\'œuvre de la Renaissance italienne.',
+            biographie_artiste: 'Léonard de Vinci (1452-1519) était un polymathe italien de la Renaissance.',
+            prix_location_mois: 2500,
+            disponibilite: 'Disponible',
+            url_image: 'https://images.pexels.com/photos/1070945/pexels-photo-1070945.jpeg?auto=compress&cs=tinysrgb&w=800',
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString()
+          },
+          {
+            id: '2',
+            titre: 'La Nuit étoilée (Reproduction)',
+            artiste: 'Vincent van Gogh',
+            date: '1889',
+            courant_artistique: 'Post-impressionnisme',
+            description: 'Reproduction de l\'œuvre emblématique du post-impressionnisme.',
+            biographie_artiste: 'Vincent van Gogh (1853-1890) était un peintre post-impressionniste néerlandais.',
+            prix_location_mois: 2200,
+            disponibilite: 'Disponible',
+            url_image: 'https://images.pexels.com/photos/1070946/pexels-photo-1070946.jpeg?auto=compress&cs=tinysrgb&w=800',
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString()
+          },
+          {
+            id: '3',
+            titre: 'La Jeune Fille à la perle (Reproduction)',
+            artiste: 'Johannes Vermeer',
+            date: '1665',
+            courant_artistique: 'Baroque hollandais',
+            description: 'Reproduction de ce portrait mystérieux du maître hollandais.',
+            biographie_artiste: 'Johannes Vermeer (1632-1675) était un peintre baroque hollandais.',
+            prix_location_mois: 1800,
+            disponibilite: 'Disponible',
+            url_image: 'https://images.pexels.com/photos/1070947/pexels-photo-1070947.jpeg?auto=compress&cs=tinysrgb&w=800',
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString()
+          }
+        ];
+        
+        setArtworks(sampleArtworks);
+        setError('Données d\'exemple utilisées - problème de connexion base de données');
+      } else {
+        console.log('Artworks fetched successfully:', data?.length || 0, 'items');
+        if (!data || data.length === 0) {
+          console.log('No artworks found in database, using sample data');
+          const sampleArtworks: Tables['artworks']['Row'][] = [
+            {
+              id: '1',
+              titre: 'La Joconde (Reproduction)',
+              artiste: 'Léonard de Vinci',
+              date: '1503',
+              courant_artistique: 'Renaissance',
+              description: 'Reproduction fidèle du chef-d\'œuvre de la Renaissance italienne.',
+              biographie_artiste: 'Léonard de Vinci (1452-1519) était un polymathe italien de la Renaissance.',
+              prix_location_mois: 2500,
+              disponibilite: 'Disponible',
+              url_image: 'https://images.pexels.com/photos/1070945/pexels-photo-1070945.jpeg?auto=compress&cs=tinysrgb&w=800',
+              created_at: new Date().toISOString(),
+              updated_at: new Date().toISOString()
+            },
+            {
+              id: '2',
+              titre: 'La Nuit étoilée (Reproduction)',
+              artiste: 'Vincent van Gogh',
+              date: '1889',
+              courant_artistique: 'Post-impressionnisme',
+              description: 'Reproduction de l\'œuvre emblématique du post-impressionnisme.',
+              biographie_artiste: 'Vincent van Gogh (1853-1890) était un peintre post-impressionniste néerlandais.',
+              prix_location_mois: 2200,
+              disponibilite: 'Disponible',
+              url_image: 'https://images.pexels.com/photos/1070946/pexels-photo-1070946.jpeg?auto=compress&cs=tinysrgb&w=800',
+              created_at: new Date().toISOString(),
+              updated_at: new Date().toISOString()
+            },
+            {
+              id: '3',
+              titre: 'La Jeune Fille à la perle (Reproduction)',
+              artiste: 'Johannes Vermeer',
+              date: '1665',
+              courant_artistique: 'Baroque hollandais',
+              description: 'Reproduction de ce portrait mystérieux du maître hollandais.',
+              biographie_artiste: 'Johannes Vermeer (1632-1675) était un peintre baroque hollandais.',
+              prix_location_mois: 1800,
+              disponibilite: 'Disponible',
+              url_image: 'https://images.pexels.com/photos/1070947/pexels-photo-1070947.jpeg?auto=compress&cs=tinysrgb&w=800',
+              created_at: new Date().toISOString(),
+              updated_at: new Date().toISOString()
+            }
+          ];
+          setArtworks(sampleArtworks);
+        } else {
+          setArtworks(data);
+        }
       }
-      console.log('Artworks fetched:', data?.length);
-      setArtworks(data || []);
     } catch (err) {
       console.error('Error fetching artworks:', err);
+      console.log('Using fallback sample data due to error:', err);
       setError(err instanceof Error ? err.message : 'Erreur lors du chargement des œuvres');
+      
+      const sampleArtworks: Tables['artworks']['Row'][] = [
+        {
+          id: '1',
+          titre: 'La Joconde (Reproduction)',
+          artiste: 'Léonard de Vinci',
+          date: '1503',
+          courant_artistique: 'Renaissance',
+          description: 'Reproduction fidèle du chef-d\'œuvre de la Renaissance italienne.',
+          biographie_artiste: 'Léonard de Vinci (1452-1519) était un polymathe italien de la Renaissance.',
+          prix_location_mois: 2500,
+          disponibilite: 'Disponible',
+          url_image: 'https://images.pexels.com/photos/1070945/pexels-photo-1070945.jpeg?auto=compress&cs=tinysrgb&w=800',
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString()
+        },
+        {
+          id: '2',
+          titre: 'La Nuit étoilée (Reproduction)',
+          artiste: 'Vincent van Gogh',
+          date: '1889',
+          courant_artistique: 'Post-impressionnisme',
+          description: 'Reproduction de l\'œuvre emblématique du post-impressionnisme.',
+          biographie_artiste: 'Vincent van Gogh (1853-1890) était un peintre post-impressionniste néerlandais.',
+          prix_location_mois: 2200,
+          disponibilite: 'Disponible',
+          url_image: 'https://images.pexels.com/photos/1070946/pexels-photo-1070946.jpeg?auto=compress&cs=tinysrgb&w=800',
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString()
+        },
+        {
+          id: '3',
+          titre: 'La Jeune Fille à la perle (Reproduction)',
+          artiste: 'Johannes Vermeer',
+          date: '1665',
+          courant_artistique: 'Baroque hollandais',
+          description: 'Reproduction de ce portrait mystérieux du maître hollandais.',
+          biographie_artiste: 'Johannes Vermeer (1632-1675) était un peintre baroque hollandais.',
+          prix_location_mois: 1800,
+          disponibilite: 'Disponible',
+          url_image: 'https://images.pexels.com/photos/1070947/pexels-photo-1070947.jpeg?auto=compress&cs=tinysrgb&w=800',
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString()
+        }
+      ];
+      setArtworks(sampleArtworks);
     } finally {
+      console.log('Setting loading to false');
       setLoading(false);
     }
   };
