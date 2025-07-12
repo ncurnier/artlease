@@ -620,16 +620,12 @@ export const useCreateNewsletterSubscriber = () => {
       console.log('Creating newsletter subscriber:', subscriberData);
       
       const { data, error } = await supabase
-        .from('newsletter_subscribers')
-        .insert([{
-          email: subscriberData.email,
-          nom: subscriberData.nom || null,
-          entreprise: subscriberData.entreprise || null,
-          source: subscriberData.source || 'Site web',
-          statut: 'Actif'
-        }])
-        .select()
-        .single();
+        .rpc('add_newsletter_subscriber', {
+          p_email: subscriberData.email,
+          p_nom: subscriberData.nom || null,
+          p_entreprise: subscriberData.entreprise || null,
+          p_source: subscriberData.source || 'Site web'
+        });
 
       if (error) {
         console.error('Supabase error newsletter:', error);

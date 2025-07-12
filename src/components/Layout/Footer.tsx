@@ -19,7 +19,8 @@ const Footer: React.FC = () => {
       setTimeout(() => setIsSubscribed(false), 3000);
     } catch (error) {
       console.error('Erreur lors de l\'inscription à la newsletter:', error);
-      alert(`Erreur lors de l'inscription: ${error.message || 'Veuillez réessayer.'}`);
+      const errorMessage = error instanceof Error ? error.message : 'Veuillez réessayer.';
+      alert(`Erreur lors de l'inscription: ${errorMessage}`);
     }
   };
 
