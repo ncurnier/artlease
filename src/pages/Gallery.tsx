@@ -113,7 +113,7 @@ const Gallery: React.FC = () => {
     );
   }
 
-  if (error) {
+  if (error && artworks.length === 0) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
