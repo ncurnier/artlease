@@ -414,7 +414,6 @@ export const useArtworkManagement = () => {
         .eq('id', id);
 
       if (error) throw error;
-      console.log('Artwork deleted successfully');
     } catch (err) {
       console.error('Error deleting artwork:', err);
       const errorMessage = err instanceof Error ? err.message : 'Erreur lors de la suppression de l\'œuvre';
@@ -438,7 +437,6 @@ export const useNewsletterData = () => {
   const fetchNewsletterData = async () => {
     try {
       setLoading(true);
-      console.log('Fetching newsletter data...');
       
       // Récupérer les abonnés
       const { data: subscribersData, error: subscribersError } = await supabase
@@ -462,7 +460,6 @@ export const useNewsletterData = () => {
         throw campaignsError;
       }
 
-      console.log('Newsletter data fetched:', { subscribers: subscribersData?.length, campaigns: campaignsData?.length });
       setSubscribers(subscribersData || []);
       setCampaigns(campaignsData || []);
     } catch (err) {
@@ -475,7 +472,6 @@ export const useNewsletterData = () => {
 
   const createCampaign = async (campaignData: any) => {
     try {
-      console.log('Creating campaign:', campaignData);
       const { data, error } = await supabase
         .from('newsletter_campaigns')
         .insert([{
@@ -489,7 +485,6 @@ export const useNewsletterData = () => {
         .single();
 
       if (error) throw error;
-      console.log('Campaign created successfully:', data);
       setCampaigns(prev => [data, ...prev]);
       return data;
     } catch (err) {
@@ -500,7 +495,6 @@ export const useNewsletterData = () => {
 
   const createSubscriber = async (subscriberData: any) => {
     try {
-      console.log('Creating subscriber:', subscriberData);
       const { data, error } = await supabase
         .from('newsletter_subscribers')
         .insert([{
@@ -514,7 +508,6 @@ export const useNewsletterData = () => {
         .single();
 
       if (error) throw error;
-      console.log('Subscriber created successfully:', data);
       setSubscribers(prev => [data, ...prev]);
       return data;
     } catch (err) {
@@ -525,7 +518,6 @@ export const useNewsletterData = () => {
 
   const updateSubscriber = async (id: string, updates: any) => {
     try {
-      console.log('Updating subscriber:', id, updates);
       const { data, error } = await supabase
         .from('newsletter_subscribers')
         .update(updates)
@@ -544,8 +536,7 @@ export const useNewsletterData = () => {
   };
 
   const deleteSubscriber = async (id: string) => {
-    try {
-      console.log('Deleting subscriber:', id);
+    try {;
       const { error } = await supabase
         .from('newsletter_subscribers')
         .delete()
